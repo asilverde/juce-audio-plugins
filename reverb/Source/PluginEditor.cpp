@@ -9,32 +9,58 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
-//==============================================================================
-ReverbAudioProcessorEditor::ReverbAudioProcessorEditor (ReverbAudioProcessor& p)
-    : AudioProcessorEditor (&p), audioProcessor (p)
+ReverbAudioProcessorEditor::ReverbAudioProcessorEditor(ReverbAudioProcessor& p)
+    : AudioProcessorEditor(&p), audioProcessor(p)
 {
-    // Make sure that before the constructor has finished, you've set the
-    // editor's size to whatever you need it to be.
-    setSize (400, 300);
+    addAndMakeVisible(bgImage);
+    addAndMakeVisible(powerLine);
+    addAndMakeVisible(filterLabel);
+    addAndMakeVisible(modLabel);
+    addAndMakeVisible(sizeKnob);
+    addAndMakeVisible(dampingKnob);
+    addAndMakeVisible(mixKnob);
+    addAndMakeVisible(predelayKnob);
+    addAndMakeVisible(depthKnob);
+    addAndMakeVisible(rateKnob);
+    addAndMakeVisible(hpfKnob);
+    addAndMakeVisible(lpfKnob);
+    sizeAttach = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(
+        audioProcessor.parameters, "roomSize", sizeKnob);
+    dampingAttach = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(
+        audioProcessor.parameters, "damping", dampingKnob);
+    mixAttach = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(
+        audioProcessor.parameters, "mix", mixKnob);
+    predelayAttach = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(
+        audioProcessor.parameters, "predelay", predelayKnob);
+    hpfAttach = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(
+        audioProcessor.parameters, "hpfFreq", hpfKnob);
+    lpfAttach = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(
+        audioProcessor.parameters, "lpfFreq", lpfKnob);
+    depthAttach = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(
+        audioProcessor.parameters, "modDepth", depthKnob);
+    rateAttach = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(
+        audioProcessor.parameters, "modRate", rateKnob);
+    setSize(470, 250);
 }
 
 ReverbAudioProcessorEditor::~ReverbAudioProcessorEditor()
 {
-}
-
-//==============================================================================
-void ReverbAudioProcessorEditor::paint (juce::Graphics& g)
-{
-    // (Our component is opaque, so we must completely fill the background with a solid colour)
-    g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));
-
-    g.setColour (juce::Colours::white);
-    g.setFont (15.0f);
-    g.drawFittedText ("Hello World!", getLocalBounds(), juce::Justification::centred, 1);
+    setLookAndFeel(nullptr);
 }
 
 void ReverbAudioProcessorEditor::resized()
 {
-    // This is generally where you'll want to lay out the positions of any
-    // subcomponents in your editor..
+    bgImage.setBounds(getLocalBounds());
+    powerLine.setBounds(0, 10, 250, 50);
+    const int knobWidth = 50;
+    sizeKnob.setBounds(20, 80, 120, 150);
+    dampingKnob.setBounds(sizeKnob.getRight() + 20, sizeKnob.getY() + 35, knobWidth, knobWidth + 25);
+    predelayKnob.setBounds(dampingKnob.getRight() + 20, sizeKnob.getY() - 10, knobWidth, knobWidth + 25);
+    mixKnob.setBounds(dampingKnob.getRight() + 20, sizeKnob.getY() + 80, knobWidth, knobWidth + 25);
+    hpfKnob.setBounds(predelayKnob.getRight() + 30, predelayKnob.getY(), knobWidth, knobWidth + 25);
+    lpfKnob.setBounds(hpfKnob.getX(), mixKnob.getY(), knobWidth, knobWidth + 25);
+    filterLabel.setBounds(hpfKnob.getX() - 10, hpfKnob.getY() - 25, knobWidth + 20, 13);
+    depthKnob.setBounds(hpfKnob.getRight() + 30, hpfKnob.getY(), knobWidth, knobWidth + 25);
+    rateKnob.setBounds(depthKnob.getX(), lpfKnob.getY(), knobWidth, knobWidth + 25);
+    modLabel.setBounds(depthKnob.getX() - 10, depthKnob.getY() - 25, knobWidth + 20, 13);
 }

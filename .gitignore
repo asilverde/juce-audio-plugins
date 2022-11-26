@@ -4,7 +4,9 @@ de-esser/Builds/
 de-esser/JuceLibraryCode/
 reverb/Builds/
 reverb/JuceLibraryCode/
+
 .DS_Store
+
 compressor/.DS_Store
 de-esser/.DS_Store
 reverb/.DS_Store
