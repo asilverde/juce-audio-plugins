@@ -7,27 +7,33 @@
 */
 
 #pragma once
-
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
+#include "GUI-Components.h"
+#include "Meters.h"
 
-//==============================================================================
-/**
-*/
-class CompressorAudioProcessorEditor  : public juce::AudioProcessorEditor
+class CompressorAudioProcessorEditor : public juce::AudioProcessorEditor
 {
 public:
-    CompressorAudioProcessorEditor (CompressorAudioProcessor&);
+    CompressorAudioProcessorEditor(CompressorAudioProcessor&);
     ~CompressorAudioProcessorEditor() override;
-
-    //==============================================================================
-    void paint (juce::Graphics&) override;
+    void paint(juce::Graphics&) override {}
     void resized() override;
 
 private:
-    // This reference is provided as a quick way for your editor to
-    // access the processor object that created it.
     CompressorAudioProcessor& audioProcessor;
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (CompressorAudioProcessorEditor)
+    BgImage bgImage;
+    PowerLine powerLine{ "Compressor", "Jacob Curtis", 30 };
+    GainReductionMeter grMeter;
+    SmallKnob thresholdKnob{ "Threshold", "dB"}, attackKnob{ "Attack", "ms" },
+        releaseKnob{ "Release", "ms" }, ratioKnob{ "Ratio", ": 1" }, makeUpKnob{ "Make Up", "dB" },
+        scFreqKnob{ "SC Freq", "Hz" }, mixKnob{ "Mix", "%" };
+    SmallButton scBypassButton{ "SC Bypass" }, stereoButton{ "Stereo" };
+
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> thresholdAttach, attackAttach,
+        releaseAttach, ratioAttach, makeUpAttach, scFreqAttach, mixAttach;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> scBypassAttach, stereoAttach;
+
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(CompressorAudioProcessorEditor)
 };
