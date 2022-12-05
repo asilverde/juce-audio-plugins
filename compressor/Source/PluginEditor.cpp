@@ -13,7 +13,6 @@ CompressorAudioProcessorEditor::CompressorAudioProcessorEditor(CompressorAudioPr
     : AudioProcessorEditor(&p), audioProcessor(p), grMeter(audioProcessor.gainReduction)
 {
     addAndMakeVisible(bgImage);
-    addAndMakeVisible(powerLine);
     addAndMakeVisible(thresholdKnob);
     addAndMakeVisible(attackKnob);
     addAndMakeVisible(releaseKnob);
@@ -53,7 +52,6 @@ CompressorAudioProcessorEditor::~CompressorAudioProcessorEditor()
 void CompressorAudioProcessorEditor::resized()
 {
     bgImage.setBounds(getLocalBounds());
-    powerLine.setBounds(0, 10, 280, 50);
     const int col1XPosition = 20;
     const int col2XPosition = 110;
     const int col3XPosition = 200;

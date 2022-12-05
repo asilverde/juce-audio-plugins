@@ -24,7 +24,6 @@ private:
     CompressorAudioProcessor& audioProcessor;
 
     BgImage bgImage;
-    PowerLine powerLine{ "Compressor", "Jacob Curtis", 30 };
     GainReductionMeter grMeter;
     SmallKnob thresholdKnob{ "Threshold", "dB"}, attackKnob{ "Attack", "ms" },
         releaseKnob{ "Release", "ms" }, ratioKnob{ "Ratio", ": 1" }, makeUpKnob{ "Make Up", "dB" },

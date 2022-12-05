@@ -22,23 +22,23 @@ CompressorAudioProcessor::CompressorAudioProcessor()
     parameters(*this, nullptr)
 #endif
 {
-    parameters.createAndAddParameter(std::make_unique<juce::AudioParameterFloat>("threshold",
+    parameters.createAndAddParameter(std::make_unique<juce::AudioParameterFloat>(ParameterID{"threshold", 1},
         "Threshold", juce::NormalisableRange<float>(-50.0f, 0.0f, 0.1f), 0.0f, "dB"));
-    parameters.createAndAddParameter(std::make_unique<juce::AudioParameterFloat>("attack",
+    parameters.createAndAddParameter(std::make_unique<juce::AudioParameterFloat>(ParameterID{"attack", 2},
         "Attack Time", juce::NormalisableRange<float>(0.5f, 100.0f, 0.5f), 10.0f, "ms"));
-    parameters.createAndAddParameter(std::make_unique<juce::AudioParameterFloat>("release",
+    parameters.createAndAddParameter(std::make_unique<juce::AudioParameterFloat>(ParameterID{"release", 3},
         "Release Time", juce::NormalisableRange<float>(1.0f, 1100.0f, 1.0f), 50.0f, "ms"));
-    parameters.createAndAddParameter(std::make_unique<juce::AudioParameterFloat>("ratio",
+    parameters.createAndAddParameter(std::make_unique<juce::AudioParameterFloat>(ParameterID{"ratio",4},
         "Ratio", juce::NormalisableRange<float>(1.0f, 16.0f, 1.0f), 4.0f, " : 1"));
-    parameters.createAndAddParameter(std::make_unique<juce::AudioParameterFloat>("makeUp",
+    parameters.createAndAddParameter(std::make_unique<juce::AudioParameterFloat>(ParameterID{"makeUp", 5},
         "MakeUp Gain", juce::NormalisableRange<float>(-10.0f, 20.0f, 0.1f), 0.0f, "dB"));
-    parameters.createAndAddParameter(std::make_unique<juce::AudioParameterFloat>("scFreq",
+    parameters.createAndAddParameter(std::make_unique<juce::AudioParameterFloat>(ParameterID{"scFreq", 6},
         "Side Chain Frequency", juce::NormalisableRange<float>(20.0f, 2000.0f, 1.0f), 20.0f, "Hz"));
-    parameters.createAndAddParameter(std::make_unique<juce::AudioParameterBool>("scBypass",
+    parameters.createAndAddParameter(std::make_unique<juce::AudioParameterBool>(ParameterID{"scBypass", 7},
         "Side Chain Bypass", true));
-    parameters.createAndAddParameter(std::make_unique<juce::AudioParameterBool>("stereo",
+    parameters.createAndAddParameter(std::make_unique<juce::AudioParameterBool>(ParameterID{"stereo", 8},
         "Stereo Mode", true));
-    parameters.createAndAddParameter(std::make_unique<juce::AudioParameterFloat>("mix",
+    parameters.createAndAddParameter(std::make_unique<juce::AudioParameterFloat>(ParameterID{"mix", 9},
         "Mix", juce::NormalisableRange<float>(0.0f, 100.0f, 1.0f), 100.0f, "%"));
     parameters.state = juce::ValueTree("savedParams");
 }

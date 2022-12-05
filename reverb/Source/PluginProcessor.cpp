@@ -24,8 +24,8 @@ ReverbAudioProcessor::ReverbAudioProcessor()
 {
     parameters.createAndAddParameter(std::make_unique<juce::AudioParameterFloat>(ParameterID {"roomSize", 1},
         "Room Size", juce::NormalisableRange<float>(0.0f, 100.0f, 1.0f), 50.0f));
-    parameters.createAndAddParameter(std::make_unique<juce::AudioParameterFloat>(ParameterID {"damping", 2},
-        "Damping", juce::NormalisableRange<float>(0.0f, 100.0f, 1.0f), 50.0f));
+    parameters.createAndAddParameter(std::make_unique<juce::AudioParameterFloat>(ParameterID {"damp", 2},
+        "Damp", juce::NormalisableRange<float>(0.0f, 100.0f, 1.0f), 50.0f));
     parameters.createAndAddParameter(std::make_unique<juce::AudioParameterFloat>(ParameterID {"mix", 3},
         "Mix", juce::NormalisableRange<float>(0.0f, 100.0f, 1.0f), 100.0f, "%"));
     parameters.createAndAddParameter(std::make_unique<juce::AudioParameterFloat>(ParameterID {"predelay", 4},

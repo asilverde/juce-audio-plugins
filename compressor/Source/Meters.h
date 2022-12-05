@@ -24,14 +24,14 @@ public:
         void drawButtonBackground(Graphics&, Button&, const Colour&, bool, bool) override {}
         void drawButtonText(Graphics& g, TextButton& button, bool, bool) override
         {
-            g.setFont(xxii.withHeight(14.0f));
+//            g.setFont(xxii.withHeight(14.0f));
             g.setColour(Colours::grey);
             g.drawFittedText(button.getButtonText(), button.getLocalBounds(),
                 Justification::centred, 1);
         }
     private:
-        const Font xxii{ Typeface::createSystemTypefaceFor(BinaryData::XXIIAvenRegular_ttf,
-            BinaryData::XXIIAvenRegular_ttfSize) };
+//        const Font xxii{ Typeface::createSystemTypefaceFor(BinaryData::XXIIAvenRegular_ttf,
+//            BinaryData::XXIIAvenRegular_ttfSize) };
     };
 
     LevelLabel()
@@ -243,7 +243,7 @@ public:
 
     void drawLabel(Graphics& g)
     {
-        g.setFont(xxii.withHeight(14.0f));
+//        g.setFont(xxii.withHeight(14.0f));
         g.setColour(Colours::grey);
         g.drawText("GR", Rectangle<int>(bandBounds[0].getX(), 0, 20, bandBounds[0].getY()),
             Justification::centredTop, false);
@@ -300,8 +300,8 @@ private:
         Rectangle<int>(21, 20, 10, 200) };
     const Rectangle<int> levelLabelBounds{ 0, bandBounds[0].getBottom() + 5,
         bandBounds[1].getRight() + 10, 20 };
-    const Font xxii{ Typeface::createSystemTypefaceFor(BinaryData::XXIIAvenRegular_ttf,
-        BinaryData::XXIIAvenRegular_ttfSize) };
+//    const Font xxii{ Typeface::createSystemTypefaceFor(BinaryData::XXIIAvenRegular_ttf,
+//        BinaryData::XXIIAvenRegular_ttfSize) };
     const std::array<int, 7> marksText{ 0, -6, -12, -18, -24, -30, -36 };
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(GainReductionMeter)

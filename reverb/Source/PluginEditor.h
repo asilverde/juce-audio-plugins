@@ -24,9 +24,8 @@ private:
     ReverbAudioProcessor& audioProcessor;
 
     BgImage bgImage;
-    PowerLine powerLine{ "Reverb", "Jacob Curtis", 30 };
     BigKnob sizeKnob{ "Size" };
-    SmallKnob dampingKnob{ "Damping" },
+    SmallKnob dampingKnob{ "Damp" },
         mixKnob{ "Mix", "%" },
         predelayKnob{ "Predelay", "ms" },
         depthKnob{ "Depth" },

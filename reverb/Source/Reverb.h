@@ -26,14 +26,13 @@ class ReverbModule
 public:
     ReverbModule()
     {
-        // reset delayline to use constructor with maximum delay argument
         processChain.get<ChainIndex::Delay>() = juce::dsp::DelayLine<float, dsp::DelayLineInterpolationTypes::Linear>(44100);
     }
 
     void setParameters(const juce::AudioProcessorValueTreeState& apvts)
     {
         parameters.roomSize = apvts.getRawParameterValue("roomSize")->load() * 0.01f;
-        parameters.damping = apvts.getRawParameterValue("damping")->load() * 0.01f;
+        parameters.damping = apvts.getRawParameterValue("damp")->load() * 0.01f;
         parameters.mix = apvts.getRawParameterValue("mix")->load() * 0.01f;
         parameters.predelay = apvts.getRawParameterValue("predelay")->load();
         parameters.modDepth = apvts.getRawParameterValue("modDepth")->load() * 0.005f;
@@ -59,10 +58,33 @@ public:
     {
         dryBuffer.makeCopyOf(inputBuffer, true);
         wetBuffer.makeCopyOf(inputBuffer, true);
-        setupDelay();
-        setupFilters();
-        setupModulation();
-        setupReverb();
+        
+        //delay chain
+        processChain.get<ChainIndex::Delay>().setDelay(
+            static_cast<float>(parameters.predelay * sampleRate * 0.001f));
+        
+        //filters chain
+        *processChain.get<ChainIndex::HPF>().state = *dsp::FilterDesign<float>::
+            designIIRHighpassHighOrderButterworthMethod(parameters.hpfFreq, sampleRate, 2)[0];
+        *processChain.get<ChainIndex::LPF>().state = *dsp::FilterDesign<float>::
+            designIIRLowpassHighOrderButterworthMethod(parameters.lpfFreq, sampleRate, 2)[0];
+        
+        //modulation chain
+        processChain.get<ChainIndex::Chorus>().setCentreDelay(1.0f);
+        processChain.get<ChainIndex::Chorus>().setFeedback(0.0f);
+        processChain.get<ChainIndex::Chorus>().setMix(1.0f);
+        processChain.get<ChainIndex::Chorus>().setDepth(parameters.modDepth);
+        processChain.get<ChainIndex::Chorus>().setRate(parameters.modRate);
+        
+        //reverb chain
+        reverbParameters.roomSize = parameters.roomSize;
+        reverbParameters.damping = parameters.damping;
+        reverbParameters.width = 1.0f;
+        reverbParameters.freezeMode = 0.0f;
+        reverbParameters.wetLevel = 1.0f;
+        reverbParameters.dryLevel = 0.0f;
+        processChain.get<ChainIndex::Verb>().setParameters(reverbParameters);
+        
         wetBuffer.applyGain(0.5f); // reverb is loud
         juce::dsp::AudioBlock<float> wetBlock(wetBuffer);
         juce::dsp::ProcessContextReplacing<float> wetContext(wetBlock);
@@ -71,39 +93,6 @@ public:
     }
 
 private:
-    void setupDelay()
-    {
-        processChain.get<ChainIndex::Delay>().setDelay(
-            static_cast<float>(parameters.predelay * sampleRate * 0.001f));
-    }
-
-    void setupFilters()
-    {
-        *processChain.get<ChainIndex::HPF>().state = *dsp::FilterDesign<float>::
-            designIIRHighpassHighOrderButterworthMethod(parameters.hpfFreq, sampleRate, 2)[0];
-        *processChain.get<ChainIndex::LPF>().state = *dsp::FilterDesign<float>::
-            designIIRLowpassHighOrderButterworthMethod(parameters.lpfFreq, sampleRate, 2)[0];
-    }
-
-    void setupModulation()
-    {
-        processChain.get<ChainIndex::Chorus>().setCentreDelay(1.0f);
-        processChain.get<ChainIndex::Chorus>().setFeedback(0.0f);
-        processChain.get<ChainIndex::Chorus>().setMix(1.0f);
-        processChain.get<ChainIndex::Chorus>().setDepth(parameters.modDepth);
-        processChain.get<ChainIndex::Chorus>().setRate(parameters.modRate);
-    }
-
-    void setupReverb()
-    {
-        reverbParameters.roomSize = parameters.roomSize;
-        reverbParameters.damping = parameters.damping;
-        reverbParameters.width = 1.0f;
-        reverbParameters.freezeMode = 0.0f;
-        reverbParameters.wetLevel = 1.0f;
-        reverbParameters.dryLevel = 0.0f;
-        processChain.get<ChainIndex::Verb>().setParameters(reverbParameters);
-    }
 
     void mixToOutput(AudioBuffer<float>& buffer)
     {
